@@ -16,4 +16,8 @@ class EditPermission extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return 'Permission updated';
+    }
 }

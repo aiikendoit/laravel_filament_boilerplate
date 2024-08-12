@@ -7,38 +7,58 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
+// use Filament\Forms\Components\Table;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Card::make()->schema([
-                    Forms\Components\TextInput::make('name')
+                    TextInput::make('name')
                         ->required(),
-                    Forms\Components\TextInput::make('email')
+                    TextInput::make('email')
                         ->email()
                         ->required(),
-                    Forms\Components\DateTimePicker::make('email_verified_at'),
-                    Forms\Components\TextInput::make('password')
+                    DateTimePicker::make('email_verified_at'),
+                    TextInput::make('password')
                         ->password()
-                        ->required(),
-                    Forms\Components\Textarea::make('custom_fields')
+                        ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                        ->dehydrated(fn (?string $state): bool => filled($state))
+                        ->required(fn (string $operation): bool => $operation === 'create'),
+                    Textarea::make('custom_fields')
                         ->columnSpanFull(),
-                    Forms\Components\TextInput::make('avatar_url'),
+                    TextInput::make('avatar_url'),
+
+                    Forms\Components\Select::make('roles')
+                        ->multiple()
+                        ->relationship('roles',  'name')
+                        ->preload(),
+                    Forms\Components\Select::make('permissions')
+                        ->multiple()
+                        ->relationship('permissions',  'name')
+                        ->preload(),
                 ])
-                // ->columns(2)
+                ->columns(2)
 
 
             ]);
@@ -48,29 +68,31 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
+                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                TextColumn::make('email_verified_at')
                     ->dateTime()
+                    ->sortable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('avatar_url')
+
+                TextColumn::make('avatar_url')
                     ->searchable(),
+
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
