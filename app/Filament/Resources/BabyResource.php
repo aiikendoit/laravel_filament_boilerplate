@@ -14,6 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -24,7 +25,7 @@ class BabyResource extends Resource
     protected static ?string $model = Baby::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
-    protected static ?string $modelLabel = 'Register Baby';
+    protected static ?string $modelLabel = 'BAMC Baby';
 
     public static function form(Form $form): Form
     {
@@ -60,8 +61,8 @@ class BabyResource extends Resource
                     TextInput::make('claimantContactName')
                         ->label('Claimant Contact Name')
                         ->required(),
-                    TextInput::make('Claimant Contact Name')
-                        ->label('Registration Code')
+                    TextInput::make('claimantContactNo')
+                        ->label('Claimant Contact No')
                         ->required(),
                     // Forms\Components\Select::make('roles')
                     //     ->multiple()
@@ -81,6 +82,33 @@ class BabyResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make('regCode')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('hospNo')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('firstname')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('middlename')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('suffix')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('birthdate')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('address')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('claimantContactName')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('claimantContactNo')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
