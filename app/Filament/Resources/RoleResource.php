@@ -17,6 +17,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Relationship;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
+
 // use Spatie\Permission\Models\Role;
 
 class RoleResource extends Resource
@@ -50,6 +52,12 @@ class RoleResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $bulkActions = [];
+
+        // Check if the user has the delete permission
+        if (Auth::user()->can('delete')) { // Use Auth facade here
+            $bulkActions[] = Tables\Actions\DeleteBulkAction::make();
+        }
         return $table
             ->columns([
                 //
@@ -67,11 +75,12 @@ class RoleResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make(),
+            //     ]),
+            // ]);
+            ->bulkActions($bulkActions);
     }
 
     public static function getRelations(): array
