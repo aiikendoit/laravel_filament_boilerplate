@@ -1,22 +1,62 @@
 <?php
 
 return [
-    'show_custom_fields' => true,
-    ' custom_fields' => [
-        'github' => [
-            'type' => 'text',
-            ' labell' => 'GitHub username',
-            ' placeholder' => '',
-            ' rules' => 'nullable Istring Imax: 255',
-            'required' => false,
-        ],
+    // 'show_custom_fields' => true,
+    // ' custom_fields' => [
+    //     'github' => [
+    //         'type' => 'text',
+    //         ' labell' => 'GitHub username',
+    //         ' placeholder' => '',
+    //         ' rules' => 'nullable Istring Imax: 255',
+    //         'required' => false,
+    //     ],
 
-        'twitter' => [
+    //     'twitter' => [
+    //         'type' => 'text',
+    //         ' label ' => 'Twitter username',
+    //         ' placeholder' => '',
+    //         ' rules' => 'nullablelstring Imax: 255',
+    //         ' required' => false,
+    //     ],
+    // ],
+
+    'show_custom_fields' => true,
+    'custom_fields' => [
+        'custom_field_1' => [
             'type' => 'text',
-            ' label ' => 'Twitter username',
-            ' placeholder' => '',
-            ' rules' => 'nullablelstring Imax: 255',
-            ' required' => false,
+            'label' => 'Custom Textfield 1',
+            'placeholder' => 'Custom Field 1',
+            'required' => true,
+            'rules' => 'required|string|max:255',
         ],
-    ],
+        'custom_field_2' => [
+            'type' => 'select',
+            'label' => 'Custom Select 2',
+            'placeholder' => 'Select',
+            'required' => true,
+            'options' => [
+                'option_1' => 'Option 1',
+                'option_2' => 'Option 2',
+                'option_3' => 'Option 3',
+            ],
+        ],
+        'custom_field_3' => [
+            'type' => 'textarea',
+            'label' => 'Custom Textarea 3',
+            'placeholder' => 'Textarea',
+            'rows' => '3',
+            'required' => true,
+        ],
+        'custom_field_4' => [
+            'type' => 'datetime',
+            'label' => 'Custom Datetime 4',
+            'placeholder' => 'Datetime',
+            'seconds' => false,
+        ],
+        'custom_field_5' => [
+            'type' => 'boolean',
+            'label' => 'Custom Boolean 5',
+            'placeholder' => 'Boolean'
+        ],
+    ]
 ];

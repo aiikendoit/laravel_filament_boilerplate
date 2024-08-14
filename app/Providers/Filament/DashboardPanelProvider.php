@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-
+use Filament\Forms\Components\Field;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -34,7 +34,9 @@ class DashboardPanelProvider extends PanelProvider
             // ->profile()
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                // 'primary' => Color::Amber,
+                'primary' => Color::hex('#2f557f'),
+
             ])
 
             ->plugins([
@@ -48,27 +50,29 @@ class DashboardPanelProvider extends PanelProvider
                     // ->canAccess(fn() => auth()->user()->id === 1)
                     // ->shouldRegisterNavigation(false)
                     ->shouldShowDeleteAccountForm(false)
-                    ->shouldShowSanctumTokens()
+
                     // ->shouldShowBrowserSessionsForm()
-                    ->shouldShowBrowserSessionsForm(
-                        fn() => auth()->user()->id === 1, //optional
-                        //OR
-                        false //optional
-                    )
+                    // ->shouldShowBrowserSessionsForm(
+                    //     fn() => auth()->user()->id === 1, //optional
+                    //     //OR
+                    //     false //optional
+                    // )
+                    ->shouldShowBrowserSessionsForm(false)
                     // ->shouldShowAvatarForm()
+                    
                     ->shouldShowAvatarForm(
                         value: true,
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
                         rules: 'mimes:jpeg,png|max:1024' //only accept jpeg and png files with a maximum size of 1MB
                     )
-                    ->shouldShowSanctumTokens(
-                        condition: fn() => auth()->user()->id === 1, //optional
-                        permissions: ['custom', 'abilities', 'permissions'] //optional
-                    )
-                    // ->customProfileComponents([
-                    //     \App\Livewire\CustomProfileComponent::class,
-                       
-                    // ])
+                    // ->shouldShowSanctumTokens(
+                    //     condition: fn() => auth()->user()->id === 1, //optional
+                    //     permissions: ['create', 'update', 'delete', 'view'] //optional
+                    // )
+                // ->customProfileComponents([
+                //     \App\Livewire\CustomProfileComponent::class,
+
+                // ])
             ])
 
             ->userMenuItems([
@@ -106,7 +110,5 @@ class DashboardPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ]);
-
-
     }
 }
