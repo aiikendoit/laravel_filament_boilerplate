@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('middlename');
             $table->string('lastname');
-            $table->string('suffix');
+            $table->string('suffix')->nullable();
             $table->date('birthdate');
             $table->string('address');
-            $table->string('claimantContactName');
-            $table->string('claimantContactNo');
+            $table->string('claimantContactName')->nullable();
+            $table->string('claimantContactNo')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });

@@ -19,9 +19,11 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Support\Facades\Auth;
-
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 
 class BabyResource extends Resource
@@ -29,7 +31,7 @@ class BabyResource extends Resource
     protected static ?string $model = Baby::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-plus-circle';
-    protected static ?string $modelLabel = 'BAMC Baby';
+    protected static ?string $modelLabel = 'Baby';
 
     public static function form(Form $form): Form
     {
@@ -53,8 +55,8 @@ class BabyResource extends Resource
                         ->label('Lastname')
                         ->required(),
                     TextInput::make('suffix')
-                        ->label('Suffix')
-                        ->required(),
+                        ->label('Suffix'),
+                    // ->required(),
                     DatePicker::make('birthdate')
                         ->label('Birthday')
                         ->format('m/d/Y')
@@ -72,11 +74,15 @@ class BabyResource extends Resource
                         ->image()
                         ->imageEditor()
                         ->imageEditorAspectRatios([
-                            null,
                             '16:9',
                             '4:3',
                             '1:1',
                         ])
+                        ->downloadable()
+                        ->previewable(false)
+                        ->deletable(false)
+                    // ->multiple()
+                    // SpatieMediaLibraryFileUpload::make('image')
                 ])
                     ->columns(2)
             ]);
@@ -94,15 +100,23 @@ class BabyResource extends Resource
             ->columns([
                 //
                 TextColumn::make('regCode')
+                    ->label('Registration Code')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('hospNo')
+                    ->label('Hospital No.')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('firstname')
+                    ->label('Firstname')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('middlename')
+                    ->label('Middlename')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('lastname')
+                    ->label('Lastname')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('suffix')
@@ -115,22 +129,20 @@ class BabyResource extends Resource
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('claimantContactName')
+                    ->label('Claimant Contact Name')
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('claimantContactNo')
+                    ->label('Claimant Contact No.')
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')
-                    ->image()
-                    ->openable()
-                    ->imageEditor()
-                    ->downloadable()
-                    ->imageEditorEmptyFillColor('#000000')
-                    ->imageEditorAspectRatios([
-                        '16:9',
-                        '4:3',
-                        '1:1',
-                    ]),
+                    ->checkFileExistence(false),
+                // ->disk('s3')
+                // ->visibility('private'),
+                // SpatieMediaLibraryImageColumn::make('image')
+                TextColumn::make('created_at')
+                    ->dateTime(),
             ])
             ->filters([
                 //
