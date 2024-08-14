@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('claimantContactName');
             $table->string('claimantContactNo');
-            
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

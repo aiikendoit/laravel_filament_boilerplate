@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,7 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -67,14 +68,15 @@ class BabyResource extends Resource
                     TextInput::make('claimantContactNo')
                         ->label('Claimant Contact No')
                         ->required(),
-                    // Forms\Components\Select::make('roles')
-                    //     ->multiple()
-                    //     ->relationship('roles',  'name')
-                    //     ->preload(),
-                    // Forms\Components\Select::make('permissions')
-                    //     ->multiple()
-                    //     ->relationship('permissions',  'name')
-                    //     ->preload(),
+                    FileUpload::make('image')
+                        ->image()
+                        ->imageEditor()
+                        ->imageEditorAspectRatios([
+                            null,
+                            '16:9',
+                            '4:3',
+                            '1:1',
+                        ])
                 ])
                     ->columns(2)
             ]);
@@ -118,6 +120,17 @@ class BabyResource extends Resource
                 TextColumn::make('claimantContactNo')
                     ->sortable()
                     ->searchable(),
+                ImageColumn::make('image')
+                    ->image()
+                    ->openable()
+                    ->imageEditor()
+                    ->downloadable()
+                    ->imageEditorEmptyFillColor('#000000')
+                    ->imageEditorAspectRatios([
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ]),
             ])
             ->filters([
                 //
