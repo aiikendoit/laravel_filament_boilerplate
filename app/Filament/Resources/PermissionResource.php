@@ -14,6 +14,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
+
 // use Spatie\Permission\Models\Permission;
 
 class PermissionResource extends Resource
@@ -30,23 +32,29 @@ class PermissionResource extends Resource
             ->schema([
                 //
                 TextInput::make('name')
-                ->minLength(2)
-                ->maxLength(255)
-                ->required()
-                ->unique(ignoreRecord:true)
+                    ->minLength(2)
+                    ->maxLength(255)
+                    ->required()
+                    ->unique(ignoreRecord: true)
             ]);
     }
 
     public static function table(Table $table): Table
     {
+        $bulkActions = [];
+
+        // Check if the user has the delete permission
+        if (Auth::user()->can('delete')) { // Use Auth facade here
+            $bulkActions[] = Tables\Actions\DeleteBulkAction::make();
+        }
         return $table
             ->columns([
                 //
                 TextColumn::make('id')->sortable()->label('ID No.'),
                 TextColumn::make('name'),
                 TextColumn::make('created_at')
-                ->dateTime()
-                ->sortable(),
+                    ->dateTime()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -55,11 +63,12 @@ class PermissionResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make(),
+            //     ]),
+            // ]);
+            ->bulkActions($bulkActions);
     }
 
     public static function getRelations(): array

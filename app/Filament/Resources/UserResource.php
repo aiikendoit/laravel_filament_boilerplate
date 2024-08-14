@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 // use Filament\Forms\Components\Table;
 
@@ -66,8 +67,18 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $bulkActions = [];
+
+        // Check if the user has the delete permission
+        if (Auth::user()->can('delete')) {
+            $bulkActions[] = Tables\Actions\DeleteBulkAction::make();
+        }
         return $table
             ->columns([
+                TextColumn::make('id')
+                ->label('ID No.')
+                ->sortable()
+                ->searchable(),
                 TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
@@ -94,11 +105,12 @@ class UserResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make(),
+            //     ]),
+            // ]);
+            ->bulkActions($bulkActions);
     }
 
     public static function getRelations(): array

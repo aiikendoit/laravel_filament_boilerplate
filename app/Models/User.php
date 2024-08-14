@@ -15,7 +15,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 
-class User extends Authenticatable implements HasAvatar, FilamentUser
+// class User extends Authenticatable implements HasAvatar, FilamentUser
+class User extends Authenticatable implements HasAvatar
 {
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
 
@@ -29,6 +30,7 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         'email',
         'password',
         'avatar_url',
+        'custom_fields',
     ];
 
     /**
@@ -51,6 +53,7 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'custom_fields' => 'array'
         ];
     }
 
@@ -61,10 +64,10 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         return $this->avatar_url ? Storage::url("$this->avatar_url") : null;
     }
 
-    public function canAccessPanel(Panel $panel): bool
-    {
-        // return $this->hasRole(['Admin', '']);
-        return $this->hasRole(['Admin', 'Moderator']);
-    }
+    // public function canAccessPanel(Panel $panel): bool //user roles implements filamentuser
+    // {
+    //     // return $this->hasRole(['Admin', '']);
+    //     return $this->hasRole(['Admin', 'Moderator']);
+    // }
 
 }

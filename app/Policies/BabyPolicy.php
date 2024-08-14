@@ -13,8 +13,14 @@ class BabyPolicy
      */
     public function viewAny(User $user)
     {
-        //
-        return $user->hasRole(['Admin', 'Moderator']);
+        // if ($user->hasRole(['Admin', 'Moderator']) || $user->hasPermissionTo('Create')) {
+        //     return true;
+        // }
+        // return false;
+        if ($user->hasPermissionTo('View')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -22,7 +28,10 @@ class BabyPolicy
      */
     public function view(User $user, Baby $baby)
     {
-        //
+        if ($user->hasPermissionTo('View')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -30,8 +39,14 @@ class BabyPolicy
      */
     public function create(User $user)
     {
-        //
-        return $user->hasRole(['Admin', 'Moderator']);
+        // if ($user->hasRole(['Admin', 'Moderator']) || $user->hasPermissionTo('Create')) {
+        //     return true;
+        // }
+        // return false;
+        if ($user->hasPermissionTo('Create')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -39,8 +54,14 @@ class BabyPolicy
      */
     public function update(User $user)
     {
-        //
-        return $user->hasRole(['Admin', 'Moderator']);
+        // if ($user->hasRole(['Admin', 'Moderator']) || $user->hasPermissionTo('Update')) {
+        //     return true;
+        // }
+        // return false;
+        if ($user->hasPermissionTo('Update')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -48,8 +69,14 @@ class BabyPolicy
      */
     public function delete(User $user)
     {
-        //
-        return $user->hasRole(['Admin', 'Moderator']);
+        // if ($user->hasRole(['Admin', 'Moderator']) || $user->hasPermissionTo('Delete')) {
+        //     return true;
+        // }
+        // return false;
+        if ($user->hasPermissionTo('Delete')) {
+            return true;
+        }
+        return false;
     }
 
     /**
