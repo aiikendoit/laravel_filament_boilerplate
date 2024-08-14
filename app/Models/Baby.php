@@ -20,5 +20,6 @@ class Baby extends Model
         'address',
         'claimantContactName',
         'claimantContactNo',
+        'image',
     ];
 }
