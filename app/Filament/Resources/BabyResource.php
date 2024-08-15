@@ -137,6 +137,7 @@ class BabyResource extends Resource
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')
+                    ->square()
                     ->checkFileExistence(false),
                 // ->disk('s3')
                 // ->visibility('private'),
